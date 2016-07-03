@@ -50,7 +50,8 @@ values."
    dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(
-                                    savehist-mode)
+                                   smooth-scrolling 
+                                    )
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -127,6 +128,12 @@ values."
                          firebelly
                          darktooth
                          darkmine
+                         twilight
+                         twilight-bright
+                         twilight-anti-bright
+                         farmhouse-light
+                         cyberpunk
+                         sanityinc-tomorrow-eighties
                          darkburn)
       
 
@@ -135,7 +142,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("ProFontX"
-                               :size 14
+                               :size 13
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -216,7 +223,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -230,7 +237,7 @@ values."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling nil
+   dotspacemacs-smooth-scrolling t
    ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode'
    ;; derivatives. If set to `relative', also turns on relative line numbers.
    ;; (default nil)
@@ -270,6 +277,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   )
 
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -277,11 +285,23 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
-;; use a random theme on startup
 
+  ;; maximizing screen on desktop (not fullscreen)
+  (setq frame-resize-pixelwise t)
+  
+  ;; default transparency
+  (spacemacs/toggle-transparency)
+
+  ;; disable fringe
+  (set-fringe-mode 0)
+
+  ;; use a random theme on startup
   (defun random-list-element (arg-list)
     (nth (random (length arg-list)) arg-list))
   (spacemacs/load-theme (random-list-element  dotspacemacs-themes))
+
+  ;; random theme hotkey
+  (global-set-key (kbd "<f12>")  (lambda () (interactive) (spacemacs/load-theme (random-list-element  dotspacemacs-themes))))
 
   ;; aspell directory
   (setq ispell-program-name "/usr/local/Cellar/aspell/0.60.6.1/bin/aspell")
@@ -336,7 +356,13 @@ you should place you code here."
   ;;globally get rid of whitespace
   (setq spacemacs-show-trailing-whitespace nil)
 
-)
+  (setq tramp-ssh-controlmaster-options
+        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+
+  (setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
+  (setq mouse-wheel-scroll-amount '(1)) ;; mouse scroll moves 1 line at a time, instead of 5 lines
+  (setq mouse-wheel-progressive-speed nil) ;; on a long mouse scroll keep scrolling by 1 line
+   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
