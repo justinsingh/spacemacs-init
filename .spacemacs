@@ -142,7 +142,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("ProFontX"
-                               :size 13
+                               :size 12
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -223,15 +223,15 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-active-transparency 90
+   dotspacemacs-active-transparency 95
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-inactive-transparency 90
+   dotspacemacs-inactive-transparency 95
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
    dotspacemacs-mode-line-unicode-symbols nil
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
@@ -286,8 +286,14 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
 
+  ;; reposition frame to hide title bar and maximize frame on desktop (without being fullscreen mode)
+  (setq ns-auto-hide-menu-bar t)
+  (set-frame-position nil 0 -25)
+  (tool-bar-mode 0)
+  (set-frame-size nil 209 70)
+
   ;; maximizing screen on desktop (not fullscreen)
-  (setq frame-resize-pixelwise t)
+  ;;(setq frame-resize-pixelwise t)
   
   ;; default transparency
   (spacemacs/toggle-transparency)
@@ -315,10 +321,6 @@ you should place you code here."
   ;; line numbers toggled with F9 key
   (global-set-key [f9] 'linum-mode)
 
-  ;;font stuff
-  ;;(custom-set-faces
-  ;; '(default ((t (:family "Fantasque Sans Mono" :foundry "outline" :slant normal :weight bold :height 113 :width normal))))
-
    ;;neotree colors
    '(neo-banner-face ((t (:foreground "ivory3" :weight bold))))
    '(neo-dir-link-face ((t (:foreground "burlywood3"))))
@@ -345,9 +347,9 @@ you should place you code here."
   (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
 
   ;;stuff to get tern working
-  ;;(add-to-list 'load-path "C:/Users/justin/AppData/Roaming/npm/node_modules/tern")
+  ;;(add-to-list 'load-path "C:/Users/_____AppData/Roaming/npm/node_modules/tern")
   ;;(autoload 'tern-mode "tern.el" nil t)
-  ;;(setenv "NODE_PATH" "c:/Users/justin/AppData/Roaming/npm/node_modules")
+  ;;(setenv "NODE_PATH" "c:/Users/_______/AppData/Roaming/npm/node_modules")
 
   ;; F7 for previous error F8 for next error
   (global-set-key [f7] 'previous-error)
