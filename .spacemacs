@@ -47,7 +47,10 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages
+   '(
+     key-chord
+     )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(
                                    smooth-scrolling 
@@ -201,7 +204,7 @@ values."
    dotspacemacs-helm-position 'bottom
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-micro-state nil
+   dotspacemacs-enable-paste-micro-state t
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -286,7 +289,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
 
-  ;; reposition frame to hide title bar and maximize frame on desktop (without being fullscreen mode)
+  ;; reposition frame to hide title bar
   (setq ns-auto-hide-menu-bar t)
   (set-frame-position nil 0 -25)
   (tool-bar-mode 0)
@@ -332,7 +335,7 @@ you should place you code here."
   ;;indentation for react configs
   (setq-default
    ;; js2-mode
-   js2-basic-offset 2
+   js2-basic-offset 5
    ;; web-mode
    css-indent-offset 2
    web-mode-markup-indent-offset 2
@@ -344,6 +347,8 @@ you should place you code here."
   (define-globalized-minor-mode my-global-evil-mode evil-mode
     (lambda () (evil-mode 1)))
   (my-global-evil-mode 1)
+
+  ;; react-mode on js files
   (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
 
   ;;stuff to get tern working
@@ -354,6 +359,11 @@ you should place you code here."
   ;; F7 for previous error F8 for next error
   (global-set-key [f7] 'previous-error)
   (global-set-key [f8] 'next-error)
+
+  ;; "jj" key press to esc insert mode
+  (setq key-chord-two-keys-delay 0.5)
+  (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+  (key-chord-mode 1)
 
   ;;globally get rid of whitespace
   (setq spacemacs-show-trailing-whitespace nil)
@@ -386,6 +396,53 @@ you should place you code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
+ '(ansi-term-color-vector
+   [unspecified "#14191f" "#d15120" "#81af34" "#deae3e" "#7e9fc9" "#a878b5" "#7e9fc9" "#dcdddd"])
+ '(fci-rule-character-color "#192028")
+ '(fci-rule-color "#192028" t)
+ '(flycheck-eslintrc ".eslintrc.json")
+ '(hl-sexp-background-color "#efebe9")
+ '(js2-highlight-level 2)
+ '(js2-mode-show-strict-warnings nil)
+ '(linum-format " %5i " t)
  '(neo-window-width 20)
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
+ '(pos-tip-background-color "#36473A")
+ '(pos-tip-foreground-color "#FFFFC8")
  '(racket-racket-program "/Users/justinsingh/Applications/Racket v6.4/bin/racket")
- '(racket-raco-program "/Users/justinsingh/Applications/Racket v6.4/bin/raco"))
+ '(racket-raco-program "/Users/justinsingh/Applications/Racket v6.4/bin/raco")
+ '(rainbow-identifiers-cie-l*a*b*-lightness 80)
+ '(rainbow-identifiers-cie-l*a*b*-saturation 18)
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#B71C1C")
+     (40 . "#FF5722")
+     (60 . "#FFA000")
+     (80 . "#558b2f")
+     (100 . "#00796b")
+     (120 . "#2196f3")
+     (140 . "#4527A0")
+     (160 . "#B71C1C")
+     (180 . "#FF5722")
+     (200 . "#FFA000")
+     (220 . "#558b2f")
+     (240 . "#00796b")
+     (260 . "#2196f3")
+     (280 . "#4527A0")
+     (300 . "#B71C1C")
+     (320 . "#FF5722")
+     (340 . "#FFA000")
+     (360 . "#558b2f"))))
+ '(vc-annotate-very-old-color nil)
+ '(xterm-color-names
+   ["#F1EBDD" "#A33555" "#BF5637" "#666E4D" "#3A6E64" "#665843" "#687366" "#50484e"])
+ '(xterm-color-names-bright
+   ["#EBE7D9" "#DB4764" "#CE6A38" "#649888" "#848F86" "#857358" "#50484e"]))
