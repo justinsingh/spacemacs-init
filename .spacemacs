@@ -18,11 +18,14 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     python
+     php
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     asm
      auto-completion
      better-defaults
      emacs-lisp
@@ -31,16 +34,19 @@ values."
      react
      javascript
      themes-megapack
-     python
-     ;; git
+     java
+     scala
+     sql
+     ;;git
      markdown
      racket
-     ;; org
+     ;;org
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     spell-checking
+     ;;spell-checking
      syntax-checking
+     swift
      ;; version-control
      )
    ;; List of additional packages that will be installed without being
@@ -145,7 +151,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("ProFontX"
-                               :size 12
+                               :size 11
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -289,15 +295,24 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
 
+  (add-to-list 'load-path "~/.emacs.d/elpa/")
+  ;; prolog-mode
+  (autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
+  (add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+
+  ;; golden ratio mode
+  (golden-ratio-mode 1)
+
+  ;; auto completion mode
+  (global-auto-complete-mode t)
+
+
   ;; reposition frame to hide title bar
   (setq ns-auto-hide-menu-bar t)
   (set-frame-position nil 0 -25)
   (tool-bar-mode 0)
-  (set-frame-size nil 209 70)
+  (set-frame-size nil 240 81)
 
-  ;; maximizing screen on desktop (not fullscreen)
-  ;;(setq frame-resize-pixelwise t)
-  
   ;; default transparency
   (spacemacs/toggle-transparency)
 
@@ -332,10 +347,21 @@ you should place you code here."
    '(neo-header-face ((t (:foreground "peach puff"))))
    '(neo-root-dir-face ((t (:foreground "gray67" :weight bold))))
 
+   ;; Set the neo-window-width to the current width of the
+   ;; neotree window, to trick neotree into resetting the
+   ;; width back to the actual window width.
+   ;; Fixes: https://github.com/jaypei/emacs-neotree/issues/262
+   (eval-after-load "neotree"
+     '(add-to-list 'window-size-change-functions
+                   (lambda (frame)
+                     (let ((neo-window (neo-global--get-window)))
+                       (unless (null neo-window)
+                         (setq neo-window-width (window-width neo-window)))))))
+
   ;;indentation for react configs
   (setq-default
    ;; js2-mode
-   js2-basic-offset 2
+   js2-basic-offset 5
    ;; web-mode
    css-indent-offset 2
    web-mode-markup-indent-offset 2
@@ -349,12 +375,7 @@ you should place you code here."
   (my-global-evil-mode 1)
 
   ;; react-mode on js files
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
-
-  ;;stuff to get tern working
-  ;;(add-to-list 'load-path "C:/Users/_____AppData/Roaming/npm/node_modules/tern")
-  ;;(autoload 'tern-mode "tern.el" nil t)
-  ;;(setenv "NODE_PATH" "c:/Users/_______/AppData/Roaming/npm/node_modules")
+  ;;(add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
 
   ;; F7 for previous error F8 for next error
   (global-set-key [f7] 'previous-error)
@@ -388,7 +409,7 @@ you should place you code here."
  '(neo-banner-face ((t (:foreground "ivory3" :weight bold))))
  '(neo-dir-link-face ((t (:foreground "burlywood3"))))
  '(neo-expand-btn-face ((t (:foreground "tan"))))
- '(neo-file-link-face ((t (:foreground "LightPink3"))))
+ '(neo-file-link-face ((t (:foreground "maroon"))))
  '(neo-header-face ((t (:foreground "peach puff"))))
  '(neo-root-dir-face ((t (:foreground "gray67" :weight bold)))))
 (custom-set-variables
@@ -402,17 +423,28 @@ you should place you code here."
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(ansi-term-color-vector
    [unspecified "#14191f" "#d15120" "#81af34" "#deae3e" "#7e9fc9" "#a878b5" "#7e9fc9" "#dcdddd"])
+ '(cursor-type (quote bar))
+ '(custom-safe-themes
+   (quote
+    ("51e228ffd6c4fff9b5168b31d5927c27734e82ec61f414970fc6bcce23bc140d" "71ecffba18621354a1be303687f33b84788e13f40141580fa81e7840752d31bf" default)))
+ '(evil-want-Y-yank-to-eol t)
  '(fci-rule-character-color "#192028")
  '(fci-rule-color "#192028" t)
  '(flycheck-eslintrc ".eslintrc.json")
+ '(hl-paren-background-colors (quote ("#2492db" "#95a5a6" nil)))
+ '(hl-paren-colors (quote ("#ecf0f1" "#ecf0f1" "#c0392b")) t)
  '(hl-sexp-background-color "#efebe9")
  '(js2-highlight-level 2)
  '(js2-mode-show-strict-warnings nil)
- '(linum-format " %5i " t)
- '(neo-window-width 20)
+ '(linum-format " %5i ")
+ '(neo-window-width 20 t)
  '(nrepl-message-colors
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
+ '(ns-antialias-text t)
+ '(package-selected-packages
+   (quote
+    (emojify pyenv-mode hl-todo helm-projectile projectile company-anaconda auto-compile packed anaconda-mode pythonic zenburn-theme zen-and-art-theme yapfify x86-lookup ws-butler winum white-sand-theme which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit swift-mode sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stekene-theme sql-indent spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme slim-mode seti-theme scss-mode sass-mode reverse-theme reveal-in-osx-finder restart-emacs request rebecca-theme rainbow-delimiters railscasts-theme racket-mode pyvenv pytest py-isort purple-haze-theme pug-mode professional-theme popwin planet-theme pip-requirements phpunit phpcbf php-extras php-auto-yasnippets phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pbcopy paradox osx-trash osx-dictionary organic-green-theme org-plus-contrib org-bullets open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noflet noctilux-theme neotree nasm-mode naquadah-theme mwim mustang-theme move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc majapahit-theme madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode live-py-mode linum-relative link-hint light-soap-theme less-css-mode launchctl key-chord json-mode js2-refactor js-doc jbeans-theme jazz-theme ir-black-theme inkpot-theme indent-guide hy-mode hungry-delete highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-themes helm-swoop helm-pydoc helm-mode-manager helm-make helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gh-md gandalf-theme fuzzy flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exotica-theme exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme ensime emmet-mode elisp-slime-nav dumb-jump drupal-mode dracula-theme django-theme disaster diminish darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cython-mode cyberpunk-theme company-web company-tern company-statistics company-emacs-eclim company-c-headers column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized coffee-mode cmake-mode clues-theme clean-aindent-mode clang-format cherry-blossom-theme busybee-theme bubbleberry-theme bracketed-paste birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
@@ -420,6 +452,10 @@ you should place you code here."
  '(racket-raco-program "/Users/justinsingh/Applications/Racket v6.4/bin/raco")
  '(rainbow-identifiers-cie-l*a*b*-lightness 80)
  '(rainbow-identifiers-cie-l*a*b*-saturation 18)
+ '(sml/active-background-color "#34495e")
+ '(sml/active-foreground-color "#ecf0f1")
+ '(sml/inactive-background-color "#dfe4ea")
+ '(sml/inactive-foreground-color "#34495e")
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote
@@ -442,6 +478,14 @@ you should place you code here."
      (340 . "#FFA000")
      (360 . "#558b2f"))))
  '(vc-annotate-very-old-color nil)
+ '(when
+      (or
+       (not
+        (boundp
+         (quote ansi-term-color-vector)))
+       (not
+        (facep
+         (aref ansi-term-color-vector 0)))))
  '(xterm-color-names
    ["#F1EBDD" "#A33555" "#BF5637" "#666E4D" "#3A6E64" "#665843" "#687366" "#50484e"])
  '(xterm-color-names-bright
